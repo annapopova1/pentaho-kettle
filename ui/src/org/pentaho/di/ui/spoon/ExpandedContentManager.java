@@ -119,7 +119,10 @@ public final class ExpandedContentManager {
         @Override public void keyReleased( KeyEvent keyEvent ) {
         }
       } );
-    }
+      //browser.setUrl( url );
+    } /*else {
+      browser.evaluate("window.goTo('core', {stepName: 'aaa', transName: 'bbb'});");
+    }*/
     browser.setUrl( url );
   }
 
