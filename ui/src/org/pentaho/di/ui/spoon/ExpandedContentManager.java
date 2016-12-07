@@ -35,6 +35,7 @@ import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.widgets.Control;
 import org.pentaho.di.ui.spoon.trans.TransGraph;
 
+import java.util.Iterator;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -119,8 +120,39 @@ public final class ExpandedContentManager {
         @Override public void keyReleased( KeyEvent keyEvent ) {
         }
       } );
-    }
-    browser.setUrl( url );
+    //}
+      browser.setUrl( url );
+      } else {
+    	String params = url.substring(url.indexOf("?"));
+    	String[] parr = params.split("&");
+    	String dataSourceUuid = "";
+    	String stepName = "";
+    	String transName = "";
+    	String optimalMaxDataSize = "";
+    	String pivotCellLimit = "";
+    	
+    	
+    	for (int i = 0; i < parr.length; i++) {
+    		String item = parr[i];
+			if (item.startsWith("dataSourceUuid")) {
+				dataSourceUuid = item.substring(item.indexOf("=") + 1);
+			} else if (item.startsWith("stepName")) {
+				stepName = item.substring(item.indexOf("=") + 1);
+			} else if (item.startsWith("transName")) {
+				transName = item.substring(item.indexOf("=") + 1);
+			} else if (item.startsWith("optimalMaxDataSize")) {
+				optimalMaxDataSize = item.substring(item.indexOf("=") + 1);
+			} else if (item.startsWith("pivotCellLimit")) {
+				pivotCellLimit = item.substring(item.indexOf("=") + 1);
+			}
+		}
+
+    	String script = "window.goTo('core.explorer-plugin.details', {stepName: '"
+    	          + stepName + "', transName: '" + transName + "', dataSourceUuid: '" + dataSourceUuid + "', optimalMaxDataSize: '" + optimalMaxDataSize
+    	          + "', pivotCellLimit: '" + pivotCellLimit + "'});";
+    	System.out.println("SCRIPT = " + script);
+        browser.evaluate(script);
+      }
   }
 
   /**
